@@ -1,16 +1,17 @@
 package com.suza.id_link_sys.Service;
 
 import com.suza.id_link_sys.DTO.StudentIdRequestDTO;
-import com.suza.id_link_sys.Repository.StudentIDRequestRepository;
 import com.suza.id_link_sys.Model.StudentIDRequest;
+import com.suza.id_link_sys.Repository.StudentIDRequestRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.nio.file.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -57,12 +58,13 @@ public class StudentIDRequestService {
         request.setYearOfStudy(dto.getYearOfStudy());
         request.setPhotoUrl(dto.getPhotoUrl());
         request.setEmail(dto.getEmail());
+        request.setPhoneNo(dto.getPhoneNo());
 
         //Set student values default
         request.setRequestDate(LocalDateTime.now());
         request.setStatus("Pending");
         request.setPrinted(false);
-        request.setRequestCount(1);
+        //request.setRequestCount(1);
         request.setQrCode("generate-later");
 
         return studentIDRequestRepository.save(request);
@@ -73,27 +75,25 @@ public class StudentIDRequestService {
         return studentIDRequestRepository.findByRegNumber(regNumber);
     }
 
-    //Method of find student
-    public StudentIDRequest findById(long id) {
-        return studentIDRequestRepository.findById(id).get();
-    }
 
     //save photo
     public String saveStudentPhoto(String regNumber, MultipartFile file) throws IOException {
         String folder = "/home/gokyumi/work/idl_system/uploads/photos";
-        String fileName = regNumber.replace("/","_") + "_" + file.getOriginalFilename();
+        String fileName = regNumber.replace("/", "_") + "_" + file.getOriginalFilename();
         Path filepath = Paths.get(folder, fileName);
+
         Files.copy(file.getInputStream(), filepath, StandardCopyOption.REPLACE_EXISTING);
-        // Update DB
-        StudentIDRequest student = studentIDRequestRepository.findByRegNumber(regNumber)
-                .orElseThrow(() -> new RuntimeException("Student not found"));
-        student.setPhotoUrl(filepath.toString());
-        studentIDRequestRepository.save(student);
 
-
-        return "Photo uploaded successfully: " + fileName;
+        // Return public URL for saved photo
+        String photoUrl = "http://localhost:8082/uploads/photos/" + fileName;
+        return photoUrl;
     }
 
+
+    // New method to save updated StudentIDRequest with photoUrl
+    public StudentIDRequest save(StudentIDRequest request) {
+        return studentIDRequestRepository.save(request);
+    }
 //    public void generatePDFandPrint(StudentIDRequest student) throws Exception {
 //        pdfService.generateStudentIDCard(student);
 //

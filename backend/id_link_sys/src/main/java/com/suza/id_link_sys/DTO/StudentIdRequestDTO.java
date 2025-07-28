@@ -10,6 +10,7 @@ public class StudentIdRequestDTO {
     private String photoUrl;
     private String email;
     private String reportUrl; // optional, required if > 3 requests
+    private int phoneNo;
 
 
 
@@ -67,5 +68,13 @@ public class StudentIdRequestDTO {
 
     public void setReportUrl(String reportUrl) {
         this.reportUrl = reportUrl;
+    }
+
+    public int getPhoneNo() {
+        return phoneNo;
+    }
+
+    public void setPhoneNo(int phoneNo) {
+        this.phoneNo = phoneNo;
     }
 }

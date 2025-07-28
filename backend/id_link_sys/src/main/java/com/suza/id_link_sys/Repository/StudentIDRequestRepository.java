@@ -20,4 +20,10 @@ public interface StudentIDRequestRepository  extends JpaRepository<StudentIDRequ
     @Transactional
     @Query("DELETE FROM StudentIDRequest s WHERE s.regNumber = :regNumber")
     void deleteByRegNumber(@Param("regNumber") String regNumber);
+
+    //This query retrieves only approved but unprinted ID requests.
+    List<StudentIDRequest> findByStatusAndPrinted(String status, boolean printed);
+    //fetch ids which are approved
+    List<StudentIDRequest> findByStatus(String status);
+
 }

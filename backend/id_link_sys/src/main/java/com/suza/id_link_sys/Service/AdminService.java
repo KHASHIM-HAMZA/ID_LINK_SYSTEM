@@ -11,7 +11,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class AdminService {
@@ -37,8 +36,25 @@ public class AdminService {
         StudentIDRequest req = requestRepo.findByRegNumber(regNumber).orElseThrow();
         req.setStatus(status);
 
+        try {
+            PDFService.generateStudentIDCard(req);
+            req.setPrinted(false); // Printed will be marked true by Bash script after printing
+        } catch (Exception e) {
+            throw new RuntimeException("Error during approve process: " + e.getMessage());
+        }
         return requestRepo.save(req);
     }
+    //APPROVED
+    @Transactional
+    public StudentIDRequest approveRequest(String regNumber) {
+        StudentIDRequest req = requestRepo.findByRegNumber(regNumber)
+                .orElseThrow(() -> new RuntimeException("Request not found"));
+
+        req.setStatus("Approved");
+
+        return requestRepo.save(req);
+    }
+
 
     //MESSAGES<SEND>
     public Message sendMessage(Message msg) {
@@ -48,5 +64,16 @@ public class AdminService {
     //<RECEIVE>
     public List<Message> incomingMessages(Message msg) {
         return msgRepository.findAll();
+    }
+
+    public StudentIDRequest rejectRequest(String regNumber) {
+        StudentIDRequest req = requestRepo.findByRegNumber(regNumber).orElseThrow();
+        req.setStatus("Rejected");
+        return requestRepo.save(req);
+
+    }
+
+    public List<StudentIDRequest> getApprovedIds() {
+        return requestRepo.findByStatus("Approved");
     }
 }

@@ -29,9 +29,10 @@ public class StudentIDRequest {
     private String status = "Pending"; // Pending, Approved, Rejected
     private boolean printed = false;
     private int requestCount = 0;
+    private int phoneNo;
 
 
-    public StudentIDRequest(Long id, String fullName, String regNumber, String course, int yearOfStudy, String photoUrl, String email, String qrCode, LocalDateTime requestDate, String status, boolean printed, int requestCount) {
+    public StudentIDRequest(Long id, String fullName, String regNumber, String course, int yearOfStudy, String photoUrl, String email, String qrCode, LocalDateTime requestDate, String status, boolean printed, int requestCount,  int phoneNo) {
         this.id = id;
         this.fullName = fullName;
         this.regNumber = regNumber;
@@ -44,6 +45,7 @@ public class StudentIDRequest {
         this.status = status;
         this.printed = printed;
         this.requestCount = requestCount;
+        this.phoneNo = phoneNo;
     }
 
     public StudentIDRequest() {
@@ -147,6 +149,14 @@ public class StudentIDRequest {
         this.requestCount = requestCount;
     }
 
+    public int getPhoneNo() {
+        return phoneNo;
+    }
+
+    public void setPhoneNo(int phoneNo) {
+        this.phoneNo = phoneNo;
+    }
+
     @Override
     public String toString() {
         return "StudentIDRequest{" +
@@ -162,6 +172,7 @@ public class StudentIDRequest {
                 ", status='" + status + '\'' +
                 ", printed=" + printed +
                 ", requestCount=" + requestCount +
+                ", phoneNo=" + phoneNo +
                 '}';
     }
 }

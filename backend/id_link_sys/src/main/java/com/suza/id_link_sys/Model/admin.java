@@ -1,40 +1,18 @@
 package com.suza.id_link_sys.Model;
 
+import jakarta.persistence.*;
+import lombok.*;
+
+@Entity
+@Table(name = "admins")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class admin {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    private String Username;
-    private String Password;
-
-    public admin(String username, String password) {
-        Username = username;
-        Password = password;
-    }
-
-    public admin() {}
-
-
-    public String getUsername() {
-        return Username;
-    }
-
-    public void setUsername(String username) {
-        Username = username;
-    }
-
-    public String getPassword() {
-        return Password;
-    }
-
-    public void setPassword(String password) {
-        Password = password;
-    }
-
-    @Override
-    public String toString() {
-        return "admin{" +
-                "Username='" + Username + '\'' +
-                ", Password='" + Password + '\'' +
-                '}';
-    }
+    private String username;
+    private String password; // store as bcrypt hash in production
 }
-
