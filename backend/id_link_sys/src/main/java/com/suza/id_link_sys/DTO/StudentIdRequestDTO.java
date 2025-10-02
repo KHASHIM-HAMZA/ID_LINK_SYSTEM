@@ -1,26 +1,16 @@
 package com.suza.id_link_sys.DTO;
 
-
 public class StudentIdRequestDTO {
-
-    private String fullName;
     private String regNumber;
+    private String qrCode;
+    private String fullName;
     private String course;
-    private int yearOfStudy;
-    private String photoUrl;
+    private Integer yearOfStudy; // Add this field
     private String email;
-    private String reportUrl; // optional, required if > 3 requests
-    private int phoneNo;
+    private Integer phoneNo;
+    private String reportUrl;
+    // Getters and Setters
 
-
-
-    public String getFullName() {
-        return fullName;
-    }
-
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
-    }
 
     public String getRegNumber() {
         return regNumber;
@@ -28,6 +18,22 @@ public class StudentIdRequestDTO {
 
     public void setRegNumber(String regNumber) {
         this.regNumber = regNumber;
+    }
+
+    public String getQrCode() {
+        return qrCode;
+    }
+
+    public void setQrCode(String qrCode) {
+        this.qrCode = qrCode;
+    }
+
+    public String getFullName() {
+        return fullName;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
     }
 
     public String getCourse() {
@@ -38,20 +44,12 @@ public class StudentIdRequestDTO {
         this.course = course;
     }
 
-    public int getYearOfStudy() {
+    public Integer getYearOfStudy() {
         return yearOfStudy;
     }
 
-    public void setYearOfStudy(int yearOfStudy) {
+    public void setYearOfStudy(Integer yearOfStudy) {
         this.yearOfStudy = yearOfStudy;
-    }
-
-    public String getPhotoUrl() {
-        return photoUrl;
-    }
-
-    public void setPhotoUrl(String photoUrl) {
-        this.photoUrl = photoUrl;
     }
 
     public String getEmail() {
@@ -62,19 +60,19 @@ public class StudentIdRequestDTO {
         this.email = email;
     }
 
+    public Integer getPhoneNo() {
+        return phoneNo;
+    }
+
+    public void setPhoneNo(Integer phoneNo) {
+        this.phoneNo = phoneNo;
+    }
+
     public String getReportUrl() {
         return reportUrl;
     }
 
     public void setReportUrl(String reportUrl) {
         this.reportUrl = reportUrl;
-    }
-
-    public int getPhoneNo() {
-        return phoneNo;
-    }
-
-    public void setPhoneNo(int phoneNo) {
-        this.phoneNo = phoneNo;
     }
 }

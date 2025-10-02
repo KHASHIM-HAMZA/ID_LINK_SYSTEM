@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:idl_sys_app_v1/pages/Admin/AdminLossReportsPage.dart';
+import 'package:idl_sys_app_v1/pages/Admin/ManagementPage.dart';
 import 'package:idl_sys_app_v1/pages/Admin/admin_DigitalIDs.dart';
 import 'package:idl_sys_app_v1/pages/Admin/admin_message.dart';
 import 'package:idl_sys_app_v1/pages/Admin/approved_Id.dart';
 import 'package:idl_sys_app_v1/pages/Admin/viewRequests.dart';
+import 'package:idl_sys_app_v1/pages/loginPage.dart';
+import 'package:idl_sys_app_v1/pages/transition%20screen.dart';
 
 class AdminDashboard extends StatefulWidget {
   const AdminDashboard({super.key});
@@ -15,11 +19,13 @@ class _AdminDashboardState extends State<AdminDashboard> {
   int selectedPageIndex = 0;
 
   final List<Widget> pages = const [
-    viewRequest(),
+    ViewRequest(),
     ApprovedIDsPage(),
     AdminMessagesPage(),
     Center(child: Text("Status Page coming soon")),
     AdminDigitalIDs(),
+    StudentManagementPage(),
+    AdminLossReportsPage(),
   ];
 
   final List<String> titles = [
@@ -28,6 +34,8 @@ class _AdminDashboardState extends State<AdminDashboard> {
     'Student Messages',
     'Status Page',
     'Digital IDs',
+    'Manager',
+    'Loss Reports',
   ];
 
   void _logout() {
@@ -45,7 +53,12 @@ class _AdminDashboardState extends State<AdminDashboard> {
               TextButton(
                 onPressed: () {
                   Navigator.pop(context);
-                  Navigator.pushReplacementNamed(context, '/login');
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => TransitionScreen(nextScreen: LoginPage()),
+                    ),
+                  );
                 },
                 child: const Text(
                   'Logout',
@@ -141,6 +154,8 @@ class _AdminDashboardState extends State<AdminDashboard> {
         _buildDrawerItem(Icons.markunread_mailbox_rounded, "Messages", 2),
         _buildDrawerItem(Icons.info_outline, "Status", 3),
         _buildDrawerItem(Icons.badge_rounded, "Digital IDs", 4),
+        _buildDrawerItem(Icons.manage_accounts, "Manager", 5),
+        _buildDrawerItem(Icons.picture_as_pdf, "Loss Reports", 6),
         const Divider(),
         ListTile(
           leading: const Icon(Icons.logout),

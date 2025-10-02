@@ -18,18 +18,18 @@ public interface StudentsRepository extends JpaRepository<Students, String> {
     @Transactional
     int deleteByRegNumber(String regNumber);
 
-    // update info
     @Modifying
     @Transactional
-    @Query("update Students s set s.email = :email, s.phoneNo = :phoneNo where s.regNumber = :regNumber")
+    @Query("UPDATE Students s SET s.email = :email, s.phoneNo = :phoneNo WHERE s.regNumber = :regNumber")
     int updateEmailAndPhone(@Param("regNumber") String regNumber, @Param("email") String email, @Param("phoneNo") int phoneNo);
 
-    //update photo
     @Modifying
     @Transactional
-    @Query("update Students s set s.photoUrl = :photoUrl where s.regNumber = :regNumber")
+    @Query("UPDATE Students s SET s.photoUrl = :photoUrl WHERE s.regNumber = :regNumber")
     int updatePhoto(@Param("regNumber") String regNumber, @Param("photoUrl") String photoUrl);
 
-//    String regNumber(String regNumber);
-//    List<Students> deleteByRegNumber(String regNumber);
+    @Query("SELECT s FROM Students s WHERE s.regNumber = :regNumber")
+    Students getPhotoUrlByRegNumber(@Param("regNumber") String regNumber);
+
+    boolean existsByRegNumber(String regNumber);
 }

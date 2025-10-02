@@ -71,11 +71,6 @@
 			<version>8.0.2</version>
 		</dependency>
 <!--		<dependency>-->
-<!--			<groupId>io.jsonwebtoken</groupId>-->
-<!--			<artifactId>jjwt-api</artifactId>-->
-<!--			<version>0.12.3</version>-->
-<!--		</dependency>-->
-<!--		<dependency>-->
 <!--			<groupId>com.auth0</groupId>-->
 <!--			<artifactId>java-jwt</artifactId>-->
 <!--			<version>4.4.0</version>-->
@@ -86,16 +81,31 @@
 <!--			<version>0.12.3</version>-->
 <!--			<scope>runtime</scope>-->
 <!--		</dependency>-->
-<!--		<dependency>-->
-<!--			<groupId>io.jsonwebtoken</groupId>-->
-<!--			<artifactId>jjwt-jackson</artifactId> &lt;!&ndash; or jjwt-gson if preferred &ndash;&gt;-->
-<!--			<version>0.12.3</version>-->
-<!--			<scope>runtime</scope>-->
-<!--		</dependency>-->
-<!--		<dependency>-->
-<!--			<groupId>org.springframework.boot</groupId>-->
-<!--			<artifactId>spring-boot-starter-security</artifactId>-->
-<!--		</dependency>-->
+		<!-- For Maven -->
+		<dependency>
+			<groupId>javax.xml.bind</groupId>
+			<artifactId>jaxb-api</artifactId>
+			<version>2.3.1</version>
+		</dependency>
+		<dependency>
+			<groupId>com.sun.xml.bind</groupId>
+			<artifactId>jaxb-core</artifactId>
+			<version>2.3.0.1</version>
+		</dependency>
+		<dependency>
+			<groupId>com.sun.xml.bind</groupId>
+			<artifactId>jaxb-impl</artifactId>
+			<version>2.3.3</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt</artifactId>
+			<version>0.9.1</version>
+		</dependency>
 		<!-- ZXing for QR codes -->
 		<dependency>
 			<groupId>com.google.zxing</groupId>

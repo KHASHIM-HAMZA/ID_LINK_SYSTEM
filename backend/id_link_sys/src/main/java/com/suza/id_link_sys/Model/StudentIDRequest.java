@@ -1,12 +1,12 @@
 package com.suza.id_link_sys.Model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 
-
 @Entity
-@Table
+@Table(name = "studentidrequest")
 public class StudentIDRequest {
     @Id
     @SequenceGenerator(
@@ -15,98 +15,71 @@ public class StudentIDRequest {
             allocationSize = 1
     )
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "idRequest_sequence")
-
     private Long id;
 
-    private String fullName;
-    private String regNumber;
-    private String course;
-    private int yearOfStudy;
-    private String photoUrl;
-    private String email;
+    @ManyToOne
+    @JoinColumn(name = "reg_number", nullable = false)
+    @JsonBackReference
+    private Students student;
+
     private String qrCode;
     private LocalDateTime requestDate;
-    private String status = "Pending"; // Pending, Approved, Rejected
+    private String status = "Pending";
     private boolean printed = false;
-    private int requestCount = 0;
-    private int phoneNo;
+    private Integer yearOfStudy;
+    private Integer requestCount = 0;
+    private Integer phoneNo;
+    private String fullName;
+    private String course;
+    private String email;
+    private String photoUrl;
+    private String reportUrl;
+    private String photoPath;
 
 
-    public StudentIDRequest(Long id, String fullName, String regNumber, String course, int yearOfStudy, String photoUrl, String email, String qrCode, LocalDateTime requestDate, String status, boolean printed, int requestCount,  int phoneNo) {
+    public StudentIDRequest(Long id, Students student, String qrCode, LocalDateTime requestDate, String status, boolean printed, Integer yearOfStudy, Integer requestCount, Integer phoneNo, String fullName, String course, String email, String photoUrl, String reportUrl, String photoPath) {
         this.id = id;
-        this.fullName = fullName;
-        this.regNumber = regNumber;
-        this.course = course;
-        this.yearOfStudy = yearOfStudy;
-        this.photoUrl = photoUrl;
-        this.email = email;
+        this.student = student;
         this.qrCode = qrCode;
         this.requestDate = requestDate;
         this.status = status;
         this.printed = printed;
+        this.yearOfStudy = yearOfStudy;
         this.requestCount = requestCount;
         this.phoneNo = phoneNo;
+        this.fullName = fullName;
+        this.course = course;
+        this.email = email;
+        this.photoUrl = photoUrl;
+        this.reportUrl = reportUrl;
+        this.photoPath = photoPath;
     }
 
     public StudentIDRequest() {
-
     }
-
 
     public Long getId() {
         return id;
+    }
+
+    public String getPhotoPath() {
+        return photoPath;
+    }
+
+    public void setPhotoPath(String photoPath) {
+        this.photoPath = photoPath;
     }
 
     public void setId(Long id) {
         this.id = id;
     }
 
-    public String getFullName() {
-        return fullName;
+    public Students getStudent() {
+        return student;
     }
 
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
-    }
-
-    public String getRegNumber() {
-        return regNumber;
-    }
-
-    public void setRegNumber(String regNumber) {
-        this.regNumber = regNumber;
-    }
-
-    public String getCourse() {
-        return course;
-    }
-
-    public void setCourse(String course) {
-        this.course = course;
-    }
-
-    public int getYearOfStudy() {
-        return yearOfStudy;
-    }
-
-    public void setYearOfStudy(int yearOfStudy) {
-        this.yearOfStudy = yearOfStudy;
-    }
-
-    public String getPhotoUrl() {
-        return photoUrl;
-    }
-
-    public void setPhotoUrl(String photoUrl) {
-        this.photoUrl = photoUrl;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
+    public void setStudent(Students student) {
+        this.student = student;
     }
 
     public String getQrCode() {
@@ -141,38 +114,87 @@ public class StudentIDRequest {
         this.printed = printed;
     }
 
-    public int getRequestCount() {
+    public Integer getYearOfStudy() {
+        return yearOfStudy;
+    }
+
+    public void setYearOfStudy(Integer yearOfStudy) {
+        this.yearOfStudy = yearOfStudy;
+    }
+
+    public Integer getRequestCount() {
         return requestCount;
     }
 
-    public void setRequestCount(int requestCount) {
+    public void setRequestCount(Integer requestCount) {
         this.requestCount = requestCount;
     }
 
-    public int getPhoneNo() {
+    public Integer getPhoneNo() {
         return phoneNo;
     }
 
-    public void setPhoneNo(int phoneNo) {
+    public void setPhoneNo(Integer phoneNo) {
         this.phoneNo = phoneNo;
+    }
+
+    public String getFullName() {
+        return fullName;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
+
+    public String getCourse() {
+        return course;
+    }
+
+    public void setCourse(String course) {
+        this.course = course;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPhotoUrl() {
+        return photoUrl;
+    }
+
+    public void setPhotoUrl(String photoUrl) {
+        this.photoUrl = photoUrl;
+    }
+
+    public String getReportUrl() {
+        return reportUrl;
+    }
+
+    public void setReportUrl(String reportUrl) {
+        this.reportUrl = reportUrl;
     }
 
     @Override
     public String toString() {
         return "StudentIDRequest{" +
                 "id=" + id +
-                ", fullName='" + fullName + '\'' +
-                ", regNumber='" + regNumber + '\'' +
-                ", course='" + course + '\'' +
-                ", yearOfStudy=" + yearOfStudy +
-                ", photoUrl='" + photoUrl + '\'' +
-                ", email='" + email + '\'' +
+                ", student=" + student +
                 ", qrCode='" + qrCode + '\'' +
                 ", requestDate=" + requestDate +
                 ", status='" + status + '\'' +
                 ", printed=" + printed +
+                ", yearOfStudy=" + yearOfStudy +
                 ", requestCount=" + requestCount +
                 ", phoneNo=" + phoneNo +
+                ", reportUrl='" + reportUrl + '\'' +
                 '}';
+    }
+
+    public String getRegNumber() {
+        return student.getRegNumber();
     }
 }

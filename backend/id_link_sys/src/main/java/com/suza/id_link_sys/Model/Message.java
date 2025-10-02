@@ -1,83 +1,63 @@
 package com.suza.id_link_sys.Model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
-
+import java.time.LocalDateTime;
 
 @Entity
-@Table
+@Table(name = "message")
 public class Message {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-
     private Long id;
-    private String regNumber;
-    private String Sender;
+
+    // Link to student (ID card owner)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "reg_number", nullable = false)
+    @JsonBackReference
+    private Students student;
+
+    private String senderName;
+    private String senderEmail;
     private String content;
-    private boolean isRead;
+    private boolean readStatus = false;
+    private LocalDateTime sentAt = LocalDateTime.now();
+
+    private boolean is_read = false;
 
 
-    public Message() {
+    // Getters & Setters
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
+
+    public Students getStudent() { return student; }
+    public void setStudent(Students student) { this.student = student; }
+
+    public boolean isIs_read() {
+        return is_read;
     }
 
-
-    public Message(boolean isRead, String content, String sender, String regNumber, Long id) {
-        this.isRead = isRead;
-        this.content = content;
-        Sender = sender;
-        this.regNumber = regNumber;
-        this.id = id;
+    public void setIs_read(boolean is_read) {
+        this.is_read = is_read;
     }
 
+    public String getSenderName() { return senderName; }
+    public void setSenderName(String senderName) { this.senderName = senderName; }
 
-    public Long getId() {
-        return id;
-    }
+    public String getSenderEmail() { return senderEmail; }
+    public void setSenderEmail(String senderEmail) { this.senderEmail = senderEmail; }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+    public String getContent() { return content; }
+    public void setContent(String content) { this.content = content; }
 
-    public String getRegNumber() {
-        return regNumber;
-    }
+    public boolean isReadStatus() { return readStatus; }
+    public void setReadStatus(boolean readStatus) { this.readStatus = readStatus; }
 
-    public void setRegNumber(String regNumber) {
-        this.regNumber = regNumber;
-    }
+    public LocalDateTime getSentAt() { return sentAt; }
+    public void setSentAt(LocalDateTime sentAt) { this.sentAt = sentAt; }
 
-    public String getSender() {
-        return Sender;
-    }
-
-    public void setSender(String sender) {
-        Sender = sender;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
-
-    public boolean isRead() {
-        return isRead;
-    }
-
-    public void setRead(boolean read) {
-        this.isRead = read;
-    }
-
-    @Override
-    public String toString() {
-        return "Message{" +
-                "id=" + id +
-                ", regNumber='" + regNumber + '\'' +
-                ", Sender='" + Sender + '\'' +
-                ", content='" + content + '\'' +
-                ", read=" + isRead +
-                '}';
+    public void setStudentRegNumber(String currentRegNumber) {
+        this.student.setRegNumber(currentRegNumber);
     }
 }

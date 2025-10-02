@@ -3,6 +3,7 @@ import 'package:http/http.dart' as http;
 import 'package:idl_sys_app_v1/pages/Admin/admin_Dashboard.dart';
 import 'package:idl_sys_app_v1/pages/Student/homePage.dart';
 import 'package:idl_sys_app_v1/pages/config.dart';
+import 'package:idl_sys_app_v1/pages/transition%20screen.dart';
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -14,70 +15,97 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final TextEditingController regOrUserController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
+  final TextEditingController _regOrUserController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
 
-  bool isStudent = true; // toggle between student/admin
+  bool _isStudent = true; // Toggle between student/admin
+  bool _isLoading = false;
+  String _error = '';
 
-  bool isLoading = false;
-  String error = '';
+  Future<void> _login() async {
+    final usernameOrRegNumber = _regOrUserController.text.trim();
+    final password = _passwordController.text;
 
-  Future<void> login() async {
-    final username = regOrUserController.text.trim();
-    final password = passwordController.text;
-
-    if (username.isEmpty || password.isEmpty) {
-      setState(() => error = "Please fill in all fields.");
+    if (usernameOrRegNumber.isEmpty || password.isEmpty) {
+      setState(() => _error = "Please fill in all fields.");
       return;
     }
 
     setState(() {
-      isLoading = true;
-      error = '';
+      _isLoading = true;
+      _error = '';
     });
 
     try {
       final response = await http.post(
         Uri.parse(
-          isStudent
+          _isStudent
               ? '${AppConfig.baseUrl}/api/student/login'
-              : '${AppConfig.baseUrl}/api/auth/login',
+              : '${AppConfig.baseUrl}/api/auth/admin-login',
         ),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({
-          isStudent ? 'regNumber' : 'username': username,
+          _isStudent ? 'regNumber' : 'username': usernameOrRegNumber,
           'password': password,
         }),
       );
 
       if (response.statusCode == 200) {
-        final userData = json.decode(response.body);
+        final userData = jsonDecode(response.body);
+        final token = userData['token'];
+        if (token == null) throw Exception('Token not found in response');
 
-        // ✅ Save userData to SharedPreferences
+        // Ensure role has ROLE_ prefix if it doesn't already
+        String role = userData['role'];
+        if (!role.startsWith('ROLE_')) {
+          role = 'ROLE_$role';
+          userData['role'] = role;
+        }
+
+        // Save token and userData to SharedPreferences
         final prefs = await SharedPreferences.getInstance();
-        prefs.setString('userData', jsonEncode(userData));
+        await prefs.setString('jwt_token', token);
+        await prefs.setString('userData', jsonEncode(userData));
 
-        if (isStudent) {
+        // Navigate based on role
+        if (_isStudent) {
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-              builder: (context) => Homepage(userData: userData),
+              builder:
+                  (context) => TransitionScreen(
+                    nextScreen: Homepage(userData: userData),
+                  ),
             ),
           );
         } else {
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (context) => AdminDashboard()),
+            MaterialPageRoute(
+              builder:
+                  (context) => TransitionScreen(nextScreen: AdminDashboard()),
+            ),
           );
         }
       } else {
-        setState(() => error = "Invalid credentials.");
+        setState(
+          () =>
+              _error =
+                  "Invalid credentials. Status: ${response.statusCode} - ${response.body}",
+        );
       }
     } catch (e) {
-      setState(() => error = "Connection failed: $e");
+      setState(() => _error = "Connection failed: $e");
     } finally {
-      setState(() => isLoading = false);
+      setState(() => _isLoading = false);
     }
+  }
+
+  @override
+  void dispose() {
+    _regOrUserController.dispose();
+    _passwordController.dispose();
+    super.dispose();
   }
 
   @override
@@ -93,7 +121,7 @@ class _LoginPageState extends State<LoginPage> {
                 const Icon(Icons.school_outlined, size: 100),
                 const SizedBox(height: 16),
                 Text(
-                  isStudent ? "Student Login" : "Admin Login",
+                  _isStudent ? "Student Login" : "Admin Login",
                   style: const TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
@@ -101,17 +129,18 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 const SizedBox(height: 30),
                 TextField(
-                  controller: regOrUserController,
+                  controller: _regOrUserController,
                   decoration: InputDecoration(
-                    labelText: isStudent ? "Registration Number" : "Username",
+                    labelText: _isStudent ? "Registration Number" : "Username",
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
+                    errorText: _error.isNotEmpty ? _error : null,
                   ),
                 ),
                 const SizedBox(height: 16),
                 TextField(
-                  controller: passwordController,
+                  controller: _passwordController,
                   obscureText: true,
                   decoration: InputDecoration(
                     labelText: "Password",
@@ -122,7 +151,7 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 const SizedBox(height: 20),
                 ElevatedButton(
-                  onPressed: isLoading ? null : login,
+                  onPressed: _isLoading ? null : _login,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.black,
                     padding: const EdgeInsets.symmetric(
@@ -134,26 +163,26 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                   child:
-                      isLoading
+                      _isLoading
                           ? const CircularProgressIndicator(color: Colors.white)
                           : const Text(
                             "Login",
                             style: TextStyle(color: Colors.white),
                           ),
                 ),
-                if (error.isNotEmpty)
+                if (_error.isNotEmpty)
                   Padding(
                     padding: const EdgeInsets.only(top: 12),
                     child: Text(
-                      error,
+                      _error,
                       style: const TextStyle(color: Colors.red),
                     ),
                   ),
                 const SizedBox(height: 20),
                 GestureDetector(
-                  onTap: () => setState(() => isStudent = !isStudent),
+                  onTap: () => setState(() => _isStudent = !_isStudent),
                   child: Text(
-                    isStudent
+                    _isStudent
                         ? "Are you an admin? Login here"
                         : "Are you a student? Login here",
                     style: const TextStyle(color: Colors.blue),
