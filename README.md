@@ -85,8 +85,7 @@ ID LINK SYSTEM consists of three main components:
       │ ID Printing  │
       │   Workflow   │
       └──────────────┘
-
-
+```
 ## Technology Stack
 
 Mobile Application
