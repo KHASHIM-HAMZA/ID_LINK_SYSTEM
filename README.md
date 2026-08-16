@@ -86,8 +86,7 @@ ID LINK SYSTEM consists of three main components:
       │   Workflow   │
       └──────────────┘
 ```
-## Technology Stack
-
+Technology Stack
 Mobile Application
 Flutter
 Dart
@@ -191,7 +190,7 @@ Dart SDK
 Docker
 Git
 Clone the Repository
-git clone https://github.com/KHASHIM-HAMZA/ID_LINK_SYSTEM.git
+git clone https://github.com/YOUR_USERNAME/YOUR_REPOSITORY.git
 
 
 cd YOUR_REPOSITORY
@@ -287,7 +286,44 @@ Docker-based development
 Linux server environments
 Hardware/software integration
 Production-oriented troubleshooting
+Screenshots
 
+Add screenshots of the main interfaces here.
+
+Recommended screenshots:
+
+Student Login
+Student Dashboard
+ID Request
+Request Status
+Digital ID
+QR Scanner
+Admin Dashboard
+ID Request Management
+Approved IDs
+Student Management
+
+Example:
+
+## Screenshots
+
+
+### Student Application
+
+
+![Student Dashboard](screenshots/student-dashboard.png)
+
+
+### Digital ID
+
+
+![Digital ID](screenshots/digital-id.png)
+
+
+### Administration Dashboard
+
+
+![Admin Dashboard](screenshots/admin-dashboard.png)
 Security Considerations
 
 The system was designed with common application security practices in mind, including:
